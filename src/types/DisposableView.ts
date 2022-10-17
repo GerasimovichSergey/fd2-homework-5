@@ -1,4 +1,5 @@
 export interface DisposableView {
+  baseUI: string;
   /**
    * Returns a function that completely removes view from UI and removes all added listeners/timeouts
    */
