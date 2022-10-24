@@ -2,7 +2,7 @@ import './style.scss';
 import { TodoView } from './todo';
 
 
-const todoView = new TodoView();
+const todoView = new TodoView('form');
 
 const disposeTodoView = todoView.render(document.body);
 

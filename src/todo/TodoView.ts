@@ -1,35 +1,59 @@
 import { DisposableView } from '../types';
 
-
 export class TodoView implements DisposableView {
-    baseUI: string;
+    formWrapper: HTMLElement;
 
-    constructor() {
-        this.baseUI = `
-         <form name="todo-form">
+    constructor(form: string) {
+        this.formWrapper = form;
+    }
+
+    createFormWrapper(element: string) {
+        this.formWrapper = document.createElement(element);
+        this.formWrapper.name = 'todo-form';
+    }
+
+    createToDoModel() {
+        const form = document.querySelector('form');
+
+        form.innerHTML = `
             <h1>Todo App</h1>
-            <label><input type="text" name="task" placeholder="Type your task here"></label>
-            <label><input type="date" name="date"></label>
+            <label><input type="text" name="task" placeholder="Type your task here" required></label>
+            <label><input type="date" name="date" required></label>
             <button type="submit">Add task</button>
-            <ul class="tasks-list" type="none">
-                <li>TaskName
-                    <label><input type="checkbox" class="check-task"></label>
-                    <button class="delete">Delete</button>
-                </li>
-                <li>TaskName
-                    <label><input type="checkbox" class="check-task"></label>
-                    <button class="delete">Delete</button>
-                </li>
-                <li>TaskName
-                    <label><input type="checkbox" class="check-task"></label>
-                    <button class="delete">Delete</button>
-                </li>
-            </ul>
-        </form>`;
+            <ul class="tasks-list" type="none"></ul>
+        `;
+    }
+
+    addEventListeners() {
+        const getFormData = document.querySelector('form');
+
+        getFormData.addEventListener('submit', (event) => {
+            event.preventDefault();
+            this.addTask();
+        })
+    }
+
+    addTask() {
+        const tasksList = document.querySelector('.tasks-list');
+        const liElement = document.createElement('li');
+
+        liElement.innerHTML = `
+            <li>TaskName
+                <label><input type="checkbox" class="check-task"></label>
+                <button type="button" class="delete">Delete</button>
+            </li>
+        `;
+
+        tasksList.append(liElement);
+        // это надо перенести в ToDoModel.ts
     }
 
     render(parentElement: HTMLElement): () => void {
-        parentElement.append(this.baseUI);
+        this.createFormWrapper('form');
+        parentElement.append(this.formWrapper);
+
+        this.createToDoModel();
+        this.addEventListeners();
 
         return function () {
         };
